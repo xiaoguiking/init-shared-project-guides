@@ -1,0 +1,4 @@
+interface:
+  display_name: "初始化共享项目指引"
+  short_description: "初始化跨工具共享规则与项目知识库目录结构"
+  default_prompt: "Use $init-shared-project-guides to initialize shared agent instructions and a knowledge base in this project."
