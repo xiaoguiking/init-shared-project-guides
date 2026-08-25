@@ -28,13 +28,13 @@ jobs:
 
           for skill_file in skill_files:
               text = skill_file.read_text(encoding="utf-8")
-              match = re.match(r"^---\\s*\\n(.*?)\\n---", text, re.DOTALL)
+              match = re.match(r"^---\s*\n(.*?)\n---", text, re.DOTALL)
               if not match:
                   errors.append(f"{skill_file}: missing YAML frontmatter.")
                   continue
               frontmatter = match.group(1)
-              name = re.search(r"^name:\\s*([^\\s#]+)\\s*$", frontmatter, re.MULTILINE)
-              description = re.search(r"^description:\\s*(.+?)\\s*$", frontmatter, re.MULTILINE)
+              name = re.search(r"^name:\s*([^\s#]+)\s*$", frontmatter, re.MULTILINE)
+              description = re.search(r"^description:\s*(.+?)\s*$", frontmatter, re.MULTILINE)
               if not name:
                   errors.append(f"{skill_file}: missing name.")
               elif name.group(1) != skill_file.parent.name:
@@ -43,7 +43,7 @@ jobs:
                   errors.append(f"{skill_file}: missing description.")
 
           if errors:
-              print("\\n".join(errors), file=sys.stderr)
+              print("\n".join(errors), file=sys.stderr)
               raise SystemExit(1)
           print(f"Validated {len(skill_files)} skill(s).")
           PY
