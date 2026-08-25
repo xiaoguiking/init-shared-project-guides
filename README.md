@@ -32,3 +32,14 @@ python3 skills/init-shared-project-guides/scripts/init_project.py --target /path
 ```
 
 它只创建缺失的 `AGENTS.md`、`CLAUDE.md`、`docs/knowledge/README.md` 和 `docs/knowledge/decisions/`，不会覆盖已有文件。
+
+## 发布版本
+
+推送符合 `v*` 的 Git 标签会自动校验所有 `skills/*/SKILL.md`，并创建带自动生成说明的 GitHub Release：
+
+```bash
+git tag v0.1.0
+git push origin v0.1.0
+```
+
+常规代码提交推送到 `main` 后，CC Switch 即可通过“检查更新”发现更新；不需要等待 Release。

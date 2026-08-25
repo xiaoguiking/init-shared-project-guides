@@ -1,0 +1,54 @@
+name: Release Skills
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate skill metadata
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          import sys
+
+          skill_files = sorted(Path("skills").glob("*/SKILL.md"))
+          errors = []
+          if not skill_files:
+              errors.append("No skills/*/SKILL.md files found.")
+
+          for skill_file in skill_files:
+              text = skill_file.read_text(encoding="utf-8")
+              match = re.match(r"^---\\s*\\n(.*?)\\n---", text, re.DOTALL)
+              if not match:
+                  errors.append(f"{skill_file}: missing YAML frontmatter.")
+                  continue
+              frontmatter = match.group(1)
+              name = re.search(r"^name:\\s*([^\\s#]+)\\s*$", frontmatter, re.MULTILINE)
+              description = re.search(r"^description:\\s*(.+?)\\s*$", frontmatter, re.MULTILINE)
+              if not name:
+                  errors.append(f"{skill_file}: missing name.")
+              elif name.group(1) != skill_file.parent.name:
+                  errors.append(f"{skill_file}: name must match directory name.")
+              if not description:
+                  errors.append(f"{skill_file}: missing description.")
+
+          if errors:
+              print("\\n".join(errors), file=sys.stderr)
+              raise SystemExit(1)
+          print(f"Validated {len(skill_files)} skill(s).")
+          PY
+
+      - name: Create GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "$GITHUB_REF_NAME" --title "$GITHUB_REF_NAME" --generate-notes
