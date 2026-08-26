@@ -1,0 +1,4 @@
+interface:
+  display_name: "受控变更工作流"
+  short_description: "先分析、分步实施并用证据验证项目改动与风险"
+  default_prompt: "使用 $controlled-change-workflow 对这个项目变更先做影响分析，再分阶段实施和验证。"
