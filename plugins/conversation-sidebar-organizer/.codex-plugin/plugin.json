@@ -1,0 +1,18 @@
+{
+  "name": "conversation-sidebar-organizer",
+  "version": "0.1.0",
+  "description": "Standardize Codex task titles and organize sidebar sections safely.",
+  "author": {
+    "name": "Skill Contributors"
+  },
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "对话命名与侧边栏整理",
+    "shortDescription": "统一 Codex 对话命名，并安全整理侧边栏分类。",
+    "longDescription": "为当前对话生成可搜索标题；盘点、提议并经确认后整理历史对话，避免误移动、误归档或误改项目。",
+    "developerName": "Skill Contributors",
+    "category": "Productivity",
+    "capabilities": [],
+    "defaultPrompt": "$conversation-sidebar-organizer 规范当前对话标题"
+  }
+}

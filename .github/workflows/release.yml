@@ -48,6 +48,61 @@ jobs:
           print(f"Validated {len(skill_files)} skill(s).")
           PY
 
+      - name: Validate plugin packages
+        run: |
+          python3 - <<'PY'
+          import json
+          import re
+          import sys
+          from pathlib import Path
+
+          errors = []
+          for manifest_path in sorted(Path("plugins").glob("*/.codex-plugin/plugin.json")):
+              plugin_root = manifest_path.parents[1]
+              try:
+                  manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+              except json.JSONDecodeError as error:
+                  errors.append(f"{manifest_path}: invalid JSON ({error.msg}).")
+                  continue
+
+              if manifest.get("name") != plugin_root.name:
+                  errors.append(f"{manifest_path}: name must match plugin directory.")
+              if not re.fullmatch(r"(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)", manifest.get("version", "")):
+                  errors.append(f"{manifest_path}: version must use x.y.z semver.")
+              if manifest.get("skills") != "./skills/":
+                  errors.append(f"{manifest_path}: skills must point to ./skills/.")
+
+              skill_files = sorted((plugin_root / "skills").glob("*/SKILL.md"))
+              if not skill_files:
+                  errors.append(f"{manifest_path}: plugin must include at least one SKILL.md.")
+
+          marketplace_path = Path(".agents/plugins/marketplace.json")
+          if marketplace_path.exists():
+              try:
+                  marketplace = json.loads(marketplace_path.read_text(encoding="utf-8"))
+              except json.JSONDecodeError as error:
+                  errors.append(f"{marketplace_path}: invalid JSON ({error.msg}).")
+              else:
+                  for entry in marketplace.get("plugins", []):
+                      source = entry.get("source", {})
+                      path = source.get("path")
+                      if source.get("source") != "local" or not isinstance(path, str):
+                          errors.append(f"{marketplace_path}: each plugin needs a local source path.")
+                          continue
+                      if not (Path(path) / ".codex-plugin/plugin.json").is_file():
+                          errors.append(f"{marketplace_path}: missing plugin manifest at {path}.")
+
+          source_skill = Path("skills/conversation-sidebar-organizer/SKILL.md")
+          packaged_skill = Path("plugins/conversation-sidebar-organizer/skills/conversation-sidebar-organizer/SKILL.md")
+          if source_skill.exists() and packaged_skill.exists() and source_skill.read_bytes() != packaged_skill.read_bytes():
+              errors.append("conversation-sidebar-organizer source and packaged SKILL.md files differ.")
+
+          if errors:
+              print("\n".join(errors), file=sys.stderr)
+              raise SystemExit(1)
+          print("Validated plugin packages.")
+          PY
+
       - name: Create GitHub release
         env:
           GH_TOKEN: ${{ github.token }}
