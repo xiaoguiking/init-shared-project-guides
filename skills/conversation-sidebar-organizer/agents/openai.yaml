@@ -1,0 +1,4 @@
+interface:
+  display_name: "对话命名与侧边栏整理"
+  short_description: "统一 Codex 对话命名并维护可查找的侧边栏分类"
+  default_prompt: "整理当前或历史 Codex 对话的命名与侧边栏分类。"
