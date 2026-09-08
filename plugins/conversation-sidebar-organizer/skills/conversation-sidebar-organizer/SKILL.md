@@ -1,6 +1,6 @@
 ---
 name: conversation-sidebar-organizer
-description: "Standardize Codex task titles and organize sidebar sections. Use when the user asks to name, rename, classify, inventory, or clean up Codex conversations or sidebar sections; do not use for ordinary task work."
+description: "Name Codex tasks and organize sidebar sections. Use for explicit naming or organization requests, or on the first meaningful message, including simple tests, when standing instructions enable automatic naming. Ordinary follow-ups do not trigger renaming."
 ---
 
 # 对话命名与侧边栏整理
@@ -18,7 +18,21 @@ Map the request before taking any mutation:
 | `按建议整理历史对话` | 整理模式 | previously approved items | Apply only the approved batch. |
 | `整理这个项目的对话` | 盘点模式 first | named project | Inspect, propose, then wait for approval. |
 
-If the user did not identify a current task, a project, or the visible sidebar, ask one concise scope question before inspecting or changing anything. A request that only concerns the current title never authorizes sidebar moves.
+For explicit organization requests with no identifiable scope, ask one concise scope question. Automatic naming always targets only the current task and needs no scope question. A title-only request never authorizes sidebar moves.
+
+## 自动命名模式（需常驻指令启用）
+
+安装 Skill 本身不等于启用每个新对话的自动命名。只有用户或常驻指令明确启用时采用此模式。
+
+- 新对话首轮只要有可概括的内容，就在最终答复前按 `领域｜对象｜目标` 命名一次；信息少或需求仍需澄清不是跳过理由。只依据已知内容保守概括，不虚构项目或技术。仅纯问候、空内容或完全没有可概括信息时等待下一轮。
+- “测试一个对话的内容，简单测试下”应命名为 `工具｜对话功能｜简单测试`；“帮我看看 React 面试题”可命名为 `求职｜React｜面试题准备`；仅“你好”则等待。不要因为“简单测试”没有业务需求而跳过，也不要只输出标题建议而不调用可用的改名工具。
+- 仅使用当前对话上下文，不扫描其他对话；只改当前标题，不移动、归档或创建分类。
+- 历史中已有成功命名记录（自动或显式）则跳过。后续追问、报错、主题扩展不再自动改名；用户明确要求重新命名时才更新。
+- 用户说“这个对话不要自动命名”时停止；“标题固定为……”按用户原文执行，并停止后续自动命名。
+- 无法确定是否为新对话，或压缩后的上下文无法判断此前是否命名时，跳过。标题格式不代表命名来源；没有来源信息时不能可靠识别界面手动改名。
+- 使用宿主任务改名工具，例如 `set_thread_title`；支持省略 ID 时直接定位当前任务。不猜测任务 ID，不写应用数据库或会话文件。
+- 成功后在最终答复末尾简短记录“本对话已命名：标题”，作为后续判断依据；上下文摘要应保留成功记录及停用/固定标题选择。
+- 工具不可用或失败时继续原任务，不宣称成功或反复重试，必要时说明一次未能自动命名。这是模型执行的规则，不保证每次必定触发。
 
 ## 命名任务
 

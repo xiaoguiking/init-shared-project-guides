@@ -1,18 +1,18 @@
 {
   "name": "conversation-sidebar-organizer",
-  "version": "0.1.0",
+  "version": "0.1.0+codex.20260908021846",
   "description": "Standardize Codex task titles and organize sidebar sections safely.",
   "author": {
     "name": "Skill Contributors"
   },
   "skills": "./skills/",
   "interface": {
-    "displayName": "对话命名与侧边栏整理",
-    "shortDescription": "统一 Codex 对话命名，并安全整理侧边栏分类。",
-    "longDescription": "为当前对话生成可搜索标题；盘点、提议并经确认后整理历史对话，避免误移动、误归档或误改项目。",
+    "displayName": "\u5bf9\u8bdd\u547d\u540d\u4e0e\u4fa7\u8fb9\u680f\u6574\u7406",
+    "shortDescription": "\u81ea\u52a8\u89c4\u8303\u65b0\u5bf9\u8bdd\u6807\u9898\uff0c\u5e76\u5b89\u5168\u6574\u7406\u5386\u53f2\u4fa7\u8fb9\u680f\u3002",
+    "longDescription": "\u5728\u65b0\u5bf9\u8bdd\u9996\u8f6e\u5b58\u5728\u53ef\u6982\u62ec\u5185\u5bb9\u65f6\u751f\u6210\u53ef\u641c\u7d22\u6807\u9898\uff1b\u76d8\u70b9\u3001\u63d0\u8bae\u5e76\u7ecf\u786e\u8ba4\u540e\u6279\u91cf\u6574\u7406\u5386\u53f2\u5bf9\u8bdd\uff0c\u907f\u514d\u8bef\u79fb\u52a8\u3001\u8bef\u5f52\u6863\u6216\u8bef\u6539\u9879\u76ee\u3002",
     "developerName": "Skill Contributors",
     "category": "Productivity",
     "capabilities": [],
-    "defaultPrompt": "$conversation-sidebar-organizer 规范当前对话标题"
+    "defaultPrompt": "$conversation-sidebar-organizer \u89c4\u8303\u5f53\u524d\u5bf9\u8bdd\u6807\u9898"
   }
 }
