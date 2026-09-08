@@ -76,6 +76,13 @@ jobs:
               if not skill_files:
                   errors.append(f"{manifest_path}: plugin must include at least one SKILL.md.")
 
+              release_version = "${{ github.ref_name }}".removeprefix("v")
+              if manifest.get("version") != release_version:
+                  errors.append(
+                      f"{manifest_path}: version {manifest.get('version')!r} must match "
+                      f"release tag ${{ github.ref_name }}."
+                  )
+
           marketplace_path = Path(".agents/plugins/marketplace.json")
           if marketplace_path.exists():
               try:

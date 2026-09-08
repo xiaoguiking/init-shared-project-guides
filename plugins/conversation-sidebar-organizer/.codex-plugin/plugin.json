@@ -1,6 +1,6 @@
 {
   "name": "conversation-sidebar-organizer",
-  "version": "0.1.0+codex.20260908021846",
+  "version": "0.1.2",
   "description": "Standardize Codex task titles and organize sidebar sections safely.",
   "author": {
     "name": "Skill Contributors"
