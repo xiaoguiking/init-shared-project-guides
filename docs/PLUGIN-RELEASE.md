@@ -10,6 +10,14 @@
 
 ## 本地验收
 
+首次使用官方校验脚本时，先确认 Python 环境具备 `PyYAML`：
+
+```bash
+python3 -c "import yaml"
+# 若上一条报错，只需安装一次：
+python3 -m pip install --user PyYAML
+```
+
 ```bash
 python3 /Users/sakura/.codex/skills/.system/plugin-creator/scripts/validate_plugin.py plugins/conversation-sidebar-organizer
 ```
