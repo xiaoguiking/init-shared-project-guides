@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Safely initialize shared project guidance without overwriting files."""
+"""安全初始化中文优先的共享项目指引，且不覆盖已有文件。"""
 
 from __future__ import annotations
 
@@ -12,7 +12,7 @@ ASSETS_DIR = SKILL_DIR / "assets"
 
 
 def plan(target: Path) -> list[tuple[str, Path, Path | None]]:
-    """Return actions as (kind, destination, source)."""
+    """返回操作列表：(kind, destination, source)。"""
     actions: list[tuple[str, Path, Path | None]] = []
     files = {
         target / "AGENTS.md": ASSETS_DIR / "AGENTS.md",
@@ -36,25 +36,25 @@ def write_file(destination: Path, source: Path | None) -> None:
 
 def main() -> int:
     parser = argparse.ArgumentParser(
-        description="Initialize shared AGENTS.md, CLAUDE.md, and docs/knowledge safely."
+        description="安全初始化共享的 AGENTS.md、CLAUDE.md 和 docs/knowledge（默认中文模板）。"
     )
-    parser.add_argument("--target", default=".", help="Target project directory (default: current directory).")
-    parser.add_argument("--apply", action="store_true", help="Create missing files and directories.")
+    parser.add_argument("--target", default=".", help="目标项目目录（默认：当前目录）。")
+    parser.add_argument("--apply", action="store_true", help="创建缺失的文件和目录。")
     args = parser.parse_args()
 
     target = Path(args.target).expanduser().resolve()
     if not target.is_dir():
-        parser.error(f"target is not a directory: {target}")
+        parser.error(f"目标路径不是目录：{target}")
 
     actions = plan(target)
     for kind, destination, source in actions:
-        label = "CREATE" if kind == "create" else "MKDIR" if kind == "mkdir" else "KEEP"
+        label = "新建" if kind == "create" else "建目录" if kind == "mkdir" else "保留"
         relative = destination.relative_to(target)
-        detail = f" from {source.name}" if source and kind == "create" else ""
+        detail = f"（模板：{source.name}）" if source and kind == "create" else ""
         print(f"{label:6} {relative}{detail}")
 
     if not args.apply:
-        print("Dry run only. Re-run with --apply to create missing paths.")
+        print("以上为预览，使用 --apply 创建缺失路径。")
         return 0
 
     for kind, destination, source in actions:
@@ -63,7 +63,7 @@ def main() -> int:
         elif kind == "mkdir":
             destination.mkdir(parents=True, exist_ok=True)
 
-    print("Initialization complete. Existing files were preserved.")
+    print("初始化完成，已有文件均已保留。")
     return 0
 
 

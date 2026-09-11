@@ -1,19 +1,23 @@
-# Project Knowledge Base
+# 项目知识库
 
-Store reusable project context, important decisions, integration notes, and troubleshooting guidance here. Keep each document focused on one topic and update it when the underlying facts change.
+在这里沉淀可复用的项目背景、重要决策、集成说明和排障记录。每篇文档只聚焦一个主题；事实变化后及时更新。新增内容默认使用简体中文，文件名、命令和代码标识符保持原样；如项目已有明确语言约定，以其为准。
 
-## Suggested layout
+## 推荐目录
 
-| Path | Purpose |
-| --- | --- |
-| `architecture.md` | Decision background and architecture evolution; the repository's main architecture document remains authoritative for the current state. |
-| `integrations.md` | External-service and tool integration notes. |
-| `debugging.md` | Reproducible failures, root causes, and fixes. |
-| `decisions/` | One durable decision per `YYYY-MM-DD-topic.md` file. |
+| 路径 | 用途 | 何时创建或更新 |
+| --- | --- | --- |
+| `architecture.md` | 记录架构演进与决策背景；仓库主架构文档仍是当前状态的权威来源。 | 架构边界或关键技术选择发生变化时。 |
+| `integrations.md` | 记录外部服务、工具的接入边界与验证方式。 | 新接入、调整或排查外部依赖时。 |
+| `debugging.md` | 记录可复现的问题、根因和修复方法。 | 问题具备复用价值时。 |
+| `decisions/` | 每项长期有效的决策单独保存为 `YYYY-MM-DD-topic.md`。 | 决策已确认且需要保留取舍时。 |
 
-## Writing rules
+## 索引
 
-- Record facts, constraints, tradeoffs, and validation steps.
-- Do not present an unimplemented design as current behavior.
-- Update this index when adding a significant topic.
-- Keep per-session change summaries in the repository's session log, not here.
+当前尚无项目专有条目。新增重要主题后，在此补充文件链接和一句话摘要，方便后续查找。
+
+## 编写规则
+
+- 记录事实、约束、取舍和验证步骤，并写明适用范围。
+- 不要把未实现的设计描述为当前行为。
+- 新增重要主题后更新本索引；失效内容应标注替代来源或移除。
+- 单次会话的改动摘要写入项目会话日志，不放在此处。

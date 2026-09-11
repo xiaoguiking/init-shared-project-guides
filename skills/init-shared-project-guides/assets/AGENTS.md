@@ -1,19 +1,24 @@
-# Project Agent Guide
+# 项目 Agent 共享指引
 
-This file is the single source of shared project guidance for Codex, Claude Code, and Cursor. Maintain shared rules here; do not copy them into tool-specific files.
+本文件是 Codex、Claude Code 和 Cursor 共用规则的唯一完整来源。共享规则在此维护，不复制到各工具专有文件中。
 
-## Project context
+## 项目上下文
 
-- Read `README.md` and current architecture documentation before making material changes.
-- Treat implemented code and verified documentation as the source of truth; do not describe plans or placeholders as completed functionality.
-- Preserve unrelated changes in the working tree.
+- 进行实质性改动前，先阅读 `README.md` 与当前架构文档。
+- 以已实现代码和已验证文档为准；不要把计划或占位内容描述为已完成能力。
+- 保留工作区中与当前任务无关的改动。
 
-## Changes and safety
+## 变更与安全
 
-- Use the project's documented validation commands after relevant changes.
-- Keep secrets in environment variables. Do not commit, print, or hard-code credentials.
-- Ask before destructive actions or external side effects that are outside the requested scope.
+- 完成相关改动后，使用项目文档中已确认的验证命令。
+- 密钥只放在环境变量中；不得提交、打印或硬编码凭据。
+- 对超出当前请求范围的破坏性操作或外部副作用，先征得用户同意。
 
-## Knowledge base
+## 文档语言
 
-Long-lived project knowledge lives in `docs/knowledge/`; start with `docs/knowledge/README.md`. Read relevant entries before domain work, and update the index when adding durable knowledge. Keep this guide concise and do not use it as a session log.
+- 新增面向项目成员的指引、知识库和决策记录默认使用简体中文；文件名、命令和代码标识符保持原样。
+- 若已有文档或团队规范明确使用其他语言，遵循该约定；不要为统一语言而改写既有内容。
+
+## 知识库
+
+长期有效的项目知识存放在 `docs/knowledge/`，从 `docs/knowledge/README.md` 开始阅读。进行领域工作前先查阅相关条目，新增可复用知识后更新索引。本文件保持简洁，不作为会话日志使用。
