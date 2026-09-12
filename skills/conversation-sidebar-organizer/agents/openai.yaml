@@ -1,4 +1,4 @@
 interface:
-  display_name: "对话命名与侧边栏整理"
-  short_description: "统一 Codex 对话命名，并安全整理侧边栏分类"
-  default_prompt: "规范当前对话标题，或盘点并整理指定范围内的 Codex 对话与侧边栏分类。"
+  display_name: "Chat Naming / 对话命名助手"
+  short_description: "跨 Cursor、Codex、Grok、Claude 统一对话命名；支持 Codex 侧边栏整理"
+  default_prompt: "为当前对话生成一个跨工具可复用的 `领域｜对象｜目标` 标题；如果宿主支持，再执行对应的改名或侧边栏操作。"

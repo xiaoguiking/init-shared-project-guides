@@ -1,6 +1,8 @@
 ---
 name: controlled-change-workflow
 description: 在现有仓库中安全地分析、实施和验证限定范围的代码、文档、配置或接口变更。用户要求先分析不修改、任务拆分、影响评估、分步实施、审查 diff、运行验证或定位验证失败时使用。
+metadata:
+  version: "0.1.0"
 ---
 
 # 受控变更工作流

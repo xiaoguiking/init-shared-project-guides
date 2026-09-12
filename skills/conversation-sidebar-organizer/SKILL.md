@@ -1,11 +1,19 @@
 ---
 name: conversation-sidebar-organizer
-description: "Name Codex tasks and organize sidebar sections. Use for explicit naming or organization requests, or on the first meaningful message, including simple tests, when standing instructions enable automatic naming. Ordinary follow-ups do not trigger renaming."
+description: "Create consistent, searchable conversation titles for Cursor, Codex, Grok, Claude, and similar AI tools. When host controls are available, safely rename tasks and organize Codex sidebar sections."
+metadata:
+  version: "0.2.0"
 ---
 
-# 对话命名与侧边栏整理
+# Chat Naming / 对话命名助手
 
-Use this skill to keep a small, understandable Codex sidebar. A project is a workspace; a sidebar section is a visual category. Never rename, move, archive, or delete a project unless the user explicitly asks.
+Use this skill to create consistent, searchable conversation titles across AI tools. The naming format and decision rules are portable; actual title changes and sidebar operations depend on the host's available controls. In Codex, a project is a workspace and a sidebar section is a visual category. Never rename, move, archive, or delete a project unless the user explicitly asks.
+
+## 跨工具边界
+
+- **通用部分**：在 Cursor、Codex、Grok、Claude 或其他 Agent 工具中，按 `领域｜对象｜目标` 生成清晰、可搜索的对话标题。
+- **Codex 专属部分**：只有宿主提供任务改名、历史对话读取或侧边栏操作工具时，才能执行自动改名、盘点、批量重命名和分类；没有这些工具时，只输出建议标题或可复制的操作说明，不声称已修改。
+- **工具适配**：不要假设不同工具共享标题、历史记录或侧边栏；只操作当前宿主明确暴露的对话和项目。
 
 ## 先判定范围与模式
 

@@ -1,6 +1,8 @@
 ---
 name: init-shared-project-guides
 description: Initialize portable, Chinese-first shared project guidance and a knowledge-base structure. Use when starting a repository or standardizing an existing repository for Codex, Claude Code, and Cursor, including safely creating or merging AGENTS.md, CLAUDE.md, and docs/knowledge.
+metadata:
+  version: "0.1.3"
 ---
 
 # 初始化共享项目指引

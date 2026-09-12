@@ -3,7 +3,7 @@ name: Release Skills
 on:
   push:
     tags:
-      - "v*"
+      - "skill/*/v*"
 
 permissions:
   contents: write
@@ -14,41 +14,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Validate skill metadata
-        run: |
-          python3 - <<'PY'
-          from pathlib import Path
-          import re
-          import sys
-
-          skill_files = sorted(Path("skills").glob("*/SKILL.md"))
-          errors = []
-          if not skill_files:
-              errors.append("No skills/*/SKILL.md files found.")
-
-          for skill_file in skill_files:
-              text = skill_file.read_text(encoding="utf-8")
-              match = re.match(r"^---\s*\n(.*?)\n---", text, re.DOTALL)
-              if not match:
-                  errors.append(f"{skill_file}: missing YAML frontmatter.")
-                  continue
-              frontmatter = match.group(1)
-              name = re.search(r"^name:\s*([^\s#]+)\s*$", frontmatter, re.MULTILINE)
-              description = re.search(r"^description:\s*(.+?)\s*$", frontmatter, re.MULTILINE)
-              if not name:
-                  errors.append(f"{skill_file}: missing name.")
-              elif name.group(1) != skill_file.parent.name:
-                  errors.append(f"{skill_file}: name must match directory name.")
-              if not description:
-                  errors.append(f"{skill_file}: missing description.")
-
-          if errors:
-              print("\n".join(errors), file=sys.stderr)
-              raise SystemExit(1)
-          print(f"Validated {len(skill_files)} skill(s).")
-          PY
-
-      - name: Validate plugin packages
+      - name: Validate target Skill and plugin
         run: |
           python3 - <<'PY'
           import json
@@ -57,57 +23,73 @@ jobs:
           from pathlib import Path
 
           errors = []
-          for manifest_path in sorted(Path("plugins").glob("*/.codex-plugin/plugin.json")):
-              plugin_root = manifest_path.parents[1]
-              try:
-                  manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-              except json.JSONDecodeError as error:
-                  errors.append(f"{manifest_path}: invalid JSON ({error.msg}).")
-                  continue
+          tag = "${{ github.ref_name }}"
+          tag_match = re.fullmatch(
+              r"skill/([^/]+)/v((?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*))",
+              tag,
+          )
+          if not tag_match:
+              raise SystemExit(f"{tag}: expected skill/<skill-name>/v<version>.")
 
-              if manifest.get("name") != plugin_root.name:
-                  errors.append(f"{manifest_path}: name must match plugin directory.")
-              if not re.fullmatch(r"(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)", manifest.get("version", "")):
-                  errors.append(f"{manifest_path}: version must use x.y.z semver.")
+          skill_name, release_version = tag_match.groups()
+          source_skill = Path("skills") / skill_name / "SKILL.md"
+          plugin_root = Path("plugins") / skill_name
+          manifest_path = plugin_root / ".codex-plugin/plugin.json"
+          packaged_skill = plugin_root / "skills" / skill_name / "SKILL.md"
+
+          if not source_skill.is_file():
+              errors.append(f"missing {source_skill}.")
+          else:
+              text = source_skill.read_text(encoding="utf-8")
+              match = re.match(r"^---\s*\n(.*?)\n---", text, re.DOTALL)
+              if not match:
+                  errors.append(f"{source_skill}: missing YAML frontmatter.")
+              else:
+                  frontmatter = match.group(1)
+                  name = re.search(r"^name:\s*([^\s#]+)\s*$", frontmatter, re.MULTILINE)
+                  description = re.search(r"^description:\s*(.+?)\s*$", frontmatter, re.MULTILINE)
+                  version = re.search(
+                      r"^\s+version:\s*[\"']?([^\"'\s]+)[\"']?\s*$",
+                      frontmatter,
+                      re.MULTILINE,
+                  )
+                  if not name or name.group(1) != skill_name:
+                      errors.append(f"{source_skill}: name must match the release tag.")
+                  if not description:
+                      errors.append(f"{source_skill}: missing description.")
+                  if not version or version.group(1) != release_version:
+                      errors.append(f"{source_skill}: metadata.version must be {release_version}.")
+
+          if manifest_path.is_file():
+              manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+              if manifest.get("name") != skill_name:
+                  errors.append(f"{manifest_path}: name must match the Skill.")
+              if manifest.get("version") != release_version:
+                  errors.append(f"{manifest_path}: version must be {release_version}.")
               if manifest.get("skills") != "./skills/":
                   errors.append(f"{manifest_path}: skills must point to ./skills/.")
-
               skill_files = sorted((plugin_root / "skills").glob("*/SKILL.md"))
-              if not skill_files:
-                  errors.append(f"{manifest_path}: plugin must include at least one SKILL.md.")
+              if len(skill_files) != 1 or skill_files[0].parent.name != skill_name:
+                  errors.append(f"{manifest_path}: plugin must contain exactly its versioned Skill.")
 
-              release_version = "${{ github.ref_name }}".removeprefix("v")
-              if manifest.get("version") != release_version:
-                  errors.append(
-                      f"{manifest_path}: version {manifest.get('version')!r} must match "
-                      f"release tag ${{ github.ref_name }}."
-                  )
+          if source_skill.is_file() and packaged_skill.is_file() and source_skill.read_bytes() != packaged_skill.read_bytes():
+              errors.append(f"{source_skill} and {packaged_skill} differ.")
 
           marketplace_path = Path(".agents/plugins/marketplace.json")
           if marketplace_path.exists():
-              try:
-                  marketplace = json.loads(marketplace_path.read_text(encoding="utf-8"))
-              except json.JSONDecodeError as error:
-                  errors.append(f"{marketplace_path}: invalid JSON ({error.msg}).")
-              else:
-                  for entry in marketplace.get("plugins", []):
-                      source = entry.get("source", {})
-                      path = source.get("path")
-                      if source.get("source") != "local" or not isinstance(path, str):
-                          errors.append(f"{marketplace_path}: each plugin needs a local source path.")
-                          continue
-                      if not (Path(path) / ".codex-plugin/plugin.json").is_file():
-                          errors.append(f"{marketplace_path}: missing plugin manifest at {path}.")
-
-          source_skill = Path("skills/conversation-sidebar-organizer/SKILL.md")
-          packaged_skill = Path("plugins/conversation-sidebar-organizer/skills/conversation-sidebar-organizer/SKILL.md")
-          if source_skill.exists() and packaged_skill.exists() and source_skill.read_bytes() != packaged_skill.read_bytes():
-              errors.append("conversation-sidebar-organizer source and packaged SKILL.md files differ.")
+              marketplace = json.loads(marketplace_path.read_text(encoding="utf-8"))
+              for entry in marketplace.get("plugins", []):
+                  source = entry.get("source", {})
+                  path = source.get("path")
+                  if source.get("source") != "local" or not isinstance(path, str):
+                      errors.append(f"{marketplace_path}: each plugin needs a local source path.")
+                  elif not (Path(path) / ".codex-plugin/plugin.json").is_file():
+                      errors.append(f"{marketplace_path}: missing plugin manifest at {path}.")
 
           if errors:
               print("\n".join(errors), file=sys.stderr)
               raise SystemExit(1)
-          print("Validated plugin packages.")
+          print(f"Validated {skill_name} v{release_version}.")
           PY
 
       - name: Create GitHub release

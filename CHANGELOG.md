@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- 发布模型改为每个 Skill 独立维护 `metadata.version`，并使用 Skill 级 Git tag 发布。
+- 各 Skill 的功能变更记录迁移到对应目录下的 `skills/<skill-name>/CHANGELOG.md`。
+
 ## 0.1.3 - 2026-09-11
 
 - `init-shared-project-guides` 默认生成简体中文的共享指引和知识库模板，降低首次阅读成本。

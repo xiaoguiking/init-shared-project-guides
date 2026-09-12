@@ -1,10 +1,10 @@
 # Agent Skills
 
-可由 CC Switch 或 Codex 使用的个人 Agent Skills 集合。
+可由 CC Switch、Codex 及其他支持 Agent Skills 的工具使用的个人 Agent Skills 集合。
 
-## 推荐：对话命名与侧边栏整理
+## 推荐：Chat Naming / 对话命名助手
 
-`conversation-sidebar-organizer` 把 Codex 对话统一命名为 `领域｜对象｜目标`，并以“先盘点、后确认”的方式整理侧边栏。它不会因一次标题请求而移动其他对话，也不会自动归档或修改项目。
+`conversation-sidebar-organizer` 用 `领域｜对象｜目标` 统一 Cursor、Codex、Grok、Claude 等 AI 工具的对话命名。命名规则可以跨工具复用；只有宿主提供对应控制时，才会执行 Codex 任务改名、历史盘点和侧边栏整理。它不会因一次标题请求而移动其他对话，也不会自动归档或修改项目。
 
 ### 适用场景
 
@@ -14,7 +14,7 @@
 
 ### 触发方式
 
-在 Codex 消息中显式输入以下任一提示词：
+在支持该 Skill 的工具中显式输入以下任一提示词：
 
 ```text
 $conversation-sidebar-organizer 规范当前对话标题
@@ -32,8 +32,8 @@ $conversation-sidebar-organizer 按刚才建议整理历史对话
 ```markdown
 ## 新对话自动命名
 
-对新建的 Codex 对话，首轮只要有可概括内容，就在最终答复前使用
-conversation-sidebar-organizer 调用宿主改名工具，按 `领域｜对象｜目标` 命名一次，无需额外询问。
+对新建的对话，首轮只要有可概括内容，就在最终答复前使用
+conversation-sidebar-organizer 按 `领域｜对象｜目标` 命名一次；如果宿主提供改名工具，再调用该工具写入标题，无需额外询问。
 简单测试也必须命名，例如“测试一个对话的内容，简单测试下” → `工具｜对话功能｜简单测试`。
 信息少或需求待澄清时按已知内容保守概括，不虚构项目或技术；仅纯问候、空内容或完全无可概括信息时等待。
 历史中已有成功命名记录则跳过；只有工具成功才记录“本对话已命名：标题”。
@@ -70,7 +70,7 @@ plugins/conversation-sidebar-organizer/
 codex plugin marketplace add /absolute/path/to/Skill
 ```
 
-安装后新建一个对话，用“规范当前对话标题”验证即可。
+安装后新建一个对话，用“规范当前对话标题”验证即可。跨工具使用时，如果当前宿主没有改名 API，复制 Skill 生成的建议标题到工具界面即可。
 
 若只希望让某个项目团队使用，请将 `.agents/plugins/marketplace.json` 和 `plugins/` 一并提交到那个项目仓库。若只想使用裸 Skill 而非插件，则将 `skills/conversation-sidebar-organizer/` 放入项目的 `.agents/skills/`。
 
@@ -78,7 +78,7 @@ codex plugin marketplace add /absolute/path/to/Skill
 
 | Skill | 用途 |
 | --- | --- |
-| `conversation-sidebar-organizer` | 规范 Codex 对话标题，并以可确认的批次安全整理侧边栏分类。 |
+| `conversation-sidebar-organizer` | 跨工具生成统一对话标题；在 Codex 中以可确认的批次安全整理侧边栏分类。 |
 | `controlled-change-workflow` | 通过受控流程执行可验证的代码与配置变更。 |
 | `init-shared-project-guides` | 为项目初始化或合并 Codex、Claude Code、Cursor 共用的 `AGENTS.md`、`CLAUDE.md` 与 `docs/knowledge/`。 |
 
@@ -113,11 +113,11 @@ python3 skills/init-shared-project-guides/scripts/init_project.py --target /path
 
 ## 发布版本
 
-推送符合 `v*` 的 Git 标签会自动校验所有 `skills/*/SKILL.md`，并创建带自动生成说明的 GitHub Release：
+每个 Skill 在自己的 `SKILL.md` frontmatter 中维护 `metadata.version`。如果 Skill 有插件，插件版本与它保持一致；没有插件的 Skill 直接作为裸 Skill 发布。推送符合 `skill/<skill-name>/v<version>` 的 Git 标签时，CI 只校验并发布对应 Skill：
 
 ```bash
-git tag v0.1.0
-git push origin v0.1.0
+git tag skill/conversation-sidebar-organizer/v0.2.0
+git push origin skill/conversation-sidebar-organizer/v0.2.0
 ```
 
-常规代码提交推送到 `main` 后，CC Switch 即可通过“检查更新”发现更新；不需要等待 Release。
+旧的 `v0.x.y` 标签是历史上的仓库级发布，不代表新的版本模型。常规代码提交推送到 `main` 后，CC Switch 即可通过“检查更新”发现更新；正式发布请按 Skill 单独打标签。
