@@ -1,0 +1,14 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "controlled-change-workflow",
+  "version": "0.1.1",
+  "description": "Safely analyze, implement, and verify scoped repository changes.",
+  "author": {
+    "name": "Skill Contributors",
+    "url": "https://github.com/xiaoguiking"
+  },
+  "homepage": "https://github.com/xiaoguiking/init-shared-project-guides",
+  "repository": "https://github.com/xiaoguiking/init-shared-project-guides",
+  "license": "MIT",
+  "keywords": ["codex", "change-management", "verification", "productivity"]
+}

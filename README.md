@@ -74,6 +74,18 @@ codex plugin marketplace add /absolute/path/to/Skill
 
 若只希望让某个项目团队使用，请将 `.agents/plugins/marketplace.json` 和 `plugins/` 一并提交到那个项目仓库。若只想使用裸 Skill 而非插件，则将 `skills/conversation-sidebar-organizer/` 放入项目的 `.agents/skills/`。
 
+## 公开分发
+
+三个 Skill 都有可安装插件包，并登记在仓库的 marketplace 中。Codex 用户克隆仓库后，可通过 **Add Marketplace** 添加仓库根目录并安装所需插件。
+
+也可使用 [skills.sh](https://skills.sh/) 面向 Codex、Cursor、Claude Code 等工具安装：
+
+```bash
+npx skills add xiaoguiking/init-shared-project-guides --skill init-shared-project-guides -a codex
+```
+
+仓库以 [MIT License](LICENSE) 发布。OpenAI Plugin Directory 的公开上架需要在提交门户填写发布者资料并通过审核；提交前请在干净环境中验证对应插件。
+
 ## Skills
 
 | Skill | 用途 |

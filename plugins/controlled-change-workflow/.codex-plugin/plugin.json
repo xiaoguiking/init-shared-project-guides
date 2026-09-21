@@ -1,0 +1,18 @@
+{
+  "name": "controlled-change-workflow",
+  "version": "0.1.1",
+  "description": "Safely analyze, implement, and verify scoped repository changes.",
+  "author": {
+    "name": "Skill Contributors"
+  },
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "受控变更工作流",
+    "shortDescription": "先分析、分步实施并用证据验证限定范围的项目改动。",
+    "longDescription": "在现有仓库中安全地分析、实施和验证代码、文档、配置或接口变更；明确授权、基线、兼容性与回滚边界。",
+    "developerName": "Skill Contributors",
+    "category": "Productivity",
+    "capabilities": [],
+    "defaultPrompt": "$controlled-change-workflow 对当前项目变更先做影响分析，再分阶段实施和验证。"
+  }
+}

@@ -1,5 +1,9 @@
 # Changelog: conversation-sidebar-organizer
 
+## 0.2.1 - 2026-09-21
+
+- 增加可移植插件清单与仓库 marketplace 分发入口，支持公开插件目录和跨 Agent 安装。
+
 ## 0.2.0 - 2026-09-12
 
 - 对外名称调整为 `Chat Naming / 对话命名助手`。

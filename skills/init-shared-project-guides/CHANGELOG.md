@@ -1,5 +1,9 @@
 # Changelog: init-shared-project-guides
 
+## 0.1.5 - 2026-09-21
+
+- 增加可移植插件清单与仓库 marketplace 分发入口，支持公开插件目录和跨 Agent 安装。
+
 ## 0.1.4 - 2026-09-21
 
 - 增加 `--language zh-CN|en`，支持按仓库约定选择中文或英文模板。

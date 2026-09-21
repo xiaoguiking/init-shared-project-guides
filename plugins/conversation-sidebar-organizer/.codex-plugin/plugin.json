@@ -1,6 +1,6 @@
 {
   "name": "conversation-sidebar-organizer",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Create consistent conversation titles across Cursor, Codex, Grok, Claude, and similar AI tools; organize Codex sidebars safely when host controls are available.",
   "author": {
     "name": "Skill Contributors"

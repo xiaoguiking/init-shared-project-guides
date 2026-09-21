@@ -1,0 +1,18 @@
+{
+  "name": "init-shared-project-guides",
+  "version": "0.1.5",
+  "description": "Initialize Chinese-first shared project guides and a knowledge-base structure.",
+  "author": {
+    "name": "Skill Contributors"
+  },
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "初始化共享项目指引",
+    "shortDescription": "初始化跨工具共享规则与项目知识库目录结构。",
+    "longDescription": "为 Codex、Claude Code 和 Cursor 创建中文优先的 AGENTS.md、CLAUDE.md 与知识库骨架；支持英文模板、只读审计和不覆盖已有文件。",
+    "developerName": "Skill Contributors",
+    "category": "Productivity",
+    "capabilities": [],
+    "defaultPrompt": "$init-shared-project-guides 在当前项目初始化中文优先的共享 Agent 指引与知识库。"
+  }
+}

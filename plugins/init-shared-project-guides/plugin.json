@@ -1,0 +1,14 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "init-shared-project-guides",
+  "version": "0.1.5",
+  "description": "Initialize Chinese-first shared project guides and a knowledge-base structure.",
+  "author": {
+    "name": "Skill Contributors",
+    "url": "https://github.com/xiaoguiking"
+  },
+  "homepage": "https://github.com/xiaoguiking/init-shared-project-guides",
+  "repository": "https://github.com/xiaoguiking/init-shared-project-guides",
+  "license": "MIT",
+  "keywords": ["codex", "agents-md", "documentation", "knowledge-base"]
+}

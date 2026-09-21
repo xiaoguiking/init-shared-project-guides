@@ -2,7 +2,7 @@
 name: conversation-sidebar-organizer
 description: "Create consistent, searchable conversation titles for Cursor, Codex, Grok, Claude, and similar AI tools. When host controls are available, safely rename tasks and organize Codex sidebar sections."
 metadata:
-  version: "0.2.0"
+  version: "0.2.1"
 ---
 
 # Chat Naming / 对话命名助手
