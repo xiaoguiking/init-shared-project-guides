@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "conversation-sidebar-organizer",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "Create consistent, searchable conversation titles across AI tools and safely organize Codex sidebars when host controls are available.",
   "author": {
     "name": "Skill Contributors",

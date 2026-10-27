@@ -2,7 +2,7 @@
 name: conversation-sidebar-organizer
 description: "Create consistent, searchable conversation titles for Cursor, Codex, Grok, Claude, and similar AI tools. When host controls are available, safely rename tasks and organize Codex sidebar sections."
 metadata:
-  version: "0.2.1"
+  version: "0.3.0"
 ---
 
 # Chat Naming / 对话命名助手
@@ -32,15 +32,15 @@ For explicit organization requests with no identifiable scope, ask one concise s
 
 安装 Skill 本身不等于启用每个新对话的自动命名。只有用户或常驻指令明确启用时采用此模式。
 
-- 新对话首轮只要有可概括的内容，就在最终答复前按 `领域｜对象｜目标` 命名一次；信息少或需求仍需澄清不是跳过理由。只依据已知内容保守概括，不虚构项目或技术。仅纯问候、空内容或完全没有可概括信息时等待下一轮。
+- 新对话首轮有明确对象和目标时，正常命名；内容可概括但对象或目标不明确时，仍写入保守标题，并在内部状态记为 `provisional`（标题不得带“临时”等标记）。仅纯问候、空内容或完全没有可概括信息时等待下一轮。
 - “测试一个对话的内容，简单测试下”应命名为 `工具｜对话功能｜简单测试`；“帮我看看 React 面试题”可命名为 `求职｜React｜面试题准备`；仅“你好”则等待。不要因为“简单测试”没有业务需求而跳过，也不要只输出标题建议而不调用可用的改名工具。
 - 仅使用当前对话上下文，不扫描其他对话；只改当前标题，不移动、归档或创建分类。
-- 历史中已有成功命名记录（自动或显式）则跳过。后续追问、报错、主题扩展不再自动改名；用户明确要求重新命名时才更新。
-- 用户说“这个对话不要自动命名”时停止；“标题固定为……”按用户原文执行，并停止后续自动命名。
-- 无法确定是否为新对话，或压缩后的上下文无法判断此前是否命名时，跳过。标题格式不代表命名来源；没有来源信息时不能可靠识别界面手动改名。
+- 命名状态须记录来源、标题、状态（`provisional` 或 `completed`）及完善次数，并让摘要保留这些字段；固定标题和停用选择也须保留，不能自动恢复。可见记录示例：`命名状态：source=skill_auto; title=开发｜主题待明确｜方案梳理; status=provisional; refinement_count=0; fixed_title=null; auto_naming=enabled`。固定标题时记录 `fixed_title=<用户指定标题>`；停用时记录 `auto_naming=disabled`。来源为 `skill_auto` 或 `explicit`；成功的明确首轮命名记为 `completed`、次数 0，成功的显式命名记为 `completed`、来源 `explicit`、次数 0。
+- 只有明确记录为本 Skill 自动创建且仍待完善的 `provisional` 状态，后续轮次在用户补充明确的原任务对象和目标时，才允许自动完善一次；已记录来源时无需重新判断是否为新对话。此规则只补全原任务，不追踪转题；新主题或转题不触发完善。若完善候选标题与现有标题相同，不调用工具，直接记为 `completed`、次数仍为 0；若标题不同，工具成功后记为 `completed`、次数 1。
+- 显式命名、固定标题和停用优先。用户明确要求重新命名时执行该请求；固定标题或停用后停止自动命名/完善并保留该选择。旧版成功命名记录没有 `provisional` 标记时默认视为 `completed`。压缩丢失状态、来源不明或初次命名时无法确认新旧对话，不猜测、不自动完善。
+- 若宿主能读取当前标题，且它与记录的自动标题不同，视为用户手动覆盖并停止完善。标题格式本身不能证明命名来源。
 - 使用宿主任务改名工具，例如 `set_thread_title`；支持省略 ID 时直接定位当前任务。不猜测任务 ID，不写应用数据库或会话文件。
-- 成功后在最终答复末尾简短记录“本对话已命名：标题”，作为后续判断依据；上下文摘要应保留成功记录及停用/固定标题选择。
-- 工具不可用或失败时继续原任务，不宣称成功或反复重试，必要时说明一次未能自动命名。这是模型执行的规则，不保证每次必定触发。
+- 只有宿主改名工具成功才记录“本对话已命名：标题”，并按上述示例记录来源、标题、状态、完善次数及固定/停用选择；初次模糊命名成功记为 `provisional`、次数 0。无工具时只建议标题、不伪造写入。工具失败不算成功、不消耗完善次数；停止反复重试并继续原任务。不得因一次失败创建成功记录。
 
 ## 命名任务
 
@@ -76,7 +76,7 @@ Examples:
 | Fix a Movist Pro playback problem | `工具｜Movist Pro｜播放排障` |
 | Improve this skill's title rules | `开发｜对话命名 Skill｜优化` |
 
-For overlaps, use the result the user wants: customer-service implementation is `AI客服`; wording that presents the project in a job search is `求职`; general reusable tooling is `开发`. If the primary outcome is genuinely unclear, do not invent a new category: use `探索与待归类｜对象｜待明确` and state that it is provisional.
+For overlaps, use the result the user wants: customer-service implementation is `AI客服`; wording that presents the project in a job search is `求职`; general reusable tooling is `开发`. If the primary outcome, object, or goal is genuinely unclear, choose the most conservative title supported by known facts and internally mark it `provisional`; do not put a provisional marker in the title. A later clarification can complete it once only when it clearly concerns the original task.
 
 Before saving, verify that the title has exactly two `｜` separators, does not repeat the same meaning in adjacent parts, and is not a full sentence. If a title cannot fit cleanly, prefer a specific shorter noun over abbreviating it into something unsearchable.
 
@@ -97,7 +97,7 @@ For a requested cleanup:
 
 - **盘点模式** is read-only: report duplicates, vague titles, ambiguous items, and the proposed inventory.
 - **整理模式** is write-enabled only after the required approval. Prefer updating an existing section over creating a near-duplicate.
-- **新对话模式** changes the current title once the deliverable is clear. If title controls are unavailable, say it could not be applied; never claim an automatic rename.
+- **新对话模式** names a clear first-turn request normally, and writes a conservative `provisional` title when the first-turn content is summarizable but its object or goal is unclear. Only a later clarification of that original task may complete it once; a topic shift does not qualify. If title controls are unavailable, suggest a title without claiming it was applied.
 - For a title-only request, do not inspect or modify other conversations. For a move-only request, preserve the existing title unless the user also approves a rename.
 - When only one unambiguous task is explicitly named, rename or move it directly; summarize the exact change afterward.
 - If a task is archived, do not unarchive it just to rename or classify it unless the user specifically asks.
