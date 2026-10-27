@@ -1,6 +1,6 @@
 # Project Agent Guide
 
-This file is the single complete source of shared guidance for Codex, Claude Code, and Cursor. Maintain shared rules here; do not copy them into tool-specific files.
+This file is the single maintenance source for shared guidance across Codex, Claude Code, Cursor, GitHub Copilot, and Google Antigravity. Tool-specific files may retain or add tool-specific rules; do not maintain duplicate copies of shared rules.
 
 ## Project context
 
@@ -18,6 +18,10 @@ This file is the single complete source of shared guidance for Codex, Claude Cod
 
 - Follow the repository's established documentation language. Preserve filenames, commands, and code identifiers.
 - Do not rewrite existing user-authored documents merely to make their language uniform.
+
+## Tool compatibility
+
+AGENTS.md loading scope, feature coverage, and rule precedence differ by tool. Some Copilot surfaces do not read AGENTS.md; do not assume every tool loads this file. Verify the actual clients used by the project.
 
 ## Knowledge base
 

@@ -1,6 +1,6 @@
 {
   "name": "init-shared-project-guides",
-  "version": "0.1.5",
+  "version": "0.2.0",
   "description": "Initialize Chinese-first shared project guides and a knowledge-base structure.",
   "author": {
     "name": "Skill Contributors"
@@ -9,7 +9,7 @@
   "interface": {
     "displayName": "初始化共享项目指引",
     "shortDescription": "初始化跨工具共享规则与项目知识库目录结构。",
-    "longDescription": "为 Codex、Claude Code 和 Cursor 创建中文优先的 AGENTS.md、CLAUDE.md 与知识库骨架；支持英文模板、只读审计和不覆盖已有文件。",
+    "longDescription": "为 Codex、Claude Code、Cursor、GitHub Copilot 和 Google Antigravity 创建共享 AGENTS.md；可选生成 Gemini CLI 入口。支持中英文模板、只读审计和保留已有规则。",
     "developerName": "Skill Contributors",
     "category": "Productivity",
     "capabilities": [],

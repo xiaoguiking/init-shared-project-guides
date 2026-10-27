@@ -1,5 +1,12 @@
 # Changelog: init-shared-project-guides
 
+## 0.2.0 - 2026-10-27
+
+- 扩展共享指引到 Codex、Claude Code、Cursor、GitHub Copilot 和 Google Antigravity；Gemini CLI 可选生成兼容入口。
+- 新增 `--tools` 选择，按所选工具创建薄入口；审计各工具规则目录并提醒人工合并，不自动改写既有规则。
+- 增加官方加载机制说明与客户端验证步骤，明确 Copilot 各功能区的能力差异。
+- 加强路径碰撞与符号链接预检，避免向目标仓库之外写入。
+
 ## 0.1.5 - 2026-09-21
 
 - 增加可移植插件清单与仓库 marketplace 分发入口，支持公开插件目录和跨 Agent 安装。

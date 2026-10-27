@@ -1,8 +1,8 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "init-shared-project-guides",
-  "version": "0.1.5",
-  "description": "Initialize Chinese-first shared project guides and a knowledge-base structure.",
+  "version": "0.2.0",
+  "description": "Initialize shared AGENTS.md guidance for coding agents and a project knowledge base.",
   "author": {
     "name": "Skill Contributors",
     "url": "https://github.com/xiaoguiking"

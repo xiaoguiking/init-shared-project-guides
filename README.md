@@ -94,7 +94,7 @@ npx skills add xiaoguiking/init-shared-project-guides --skill init-shared-projec
 | --- | --- |
 | `conversation-sidebar-organizer` | 跨工具生成统一对话标题；在 Codex 中以可确认的批次安全整理侧边栏分类。 |
 | `controlled-change-workflow` | 通过受控流程执行可验证的代码与配置变更。 |
-| `init-shared-project-guides` | 为项目初始化或合并 Codex、Claude Code、Cursor 共用的 `AGENTS.md`、`CLAUDE.md` 与 `docs/knowledge/`。 |
+| `init-shared-project-guides` | 为 Codex、Claude Code、Cursor、GitHub Copilot、Google Antigravity 创建共享 `AGENTS.md`；可选为 Gemini CLI 创建薄入口，并初始化 `docs/knowledge/`。 |
 
 ## 推广与发布
 
@@ -123,7 +123,9 @@ python3 skills/init-shared-project-guides/scripts/init_project.py --target /path
 python3 skills/init-shared-project-guides/scripts/init_project.py --target /path/to/project --apply
 ```
 
-它只创建缺失的 `AGENTS.md`、`CLAUDE.md`、`docs/knowledge/README.md` 和 `docs/knowledge/decisions/`，不会覆盖已有文件。
+默认覆盖 Codex、Claude Code、Cursor、Copilot 和 Antigravity；只为所选的 Claude Code 创建 `CLAUDE.md`，选择 `gemini-cli` 时才创建 `GEMINI.md`。共享 `AGENTS.md` 与知识库始终纳入初始化计划，仅创建缺失路径。脚本不会生成 Copilot 桥接文件，也不会覆盖既有规则；用 `--audit` 检查各工具专属规则并按需人工合并。
+
+兼容范围与客户端验证方法见 `skills/init-shared-project-guides/references/tool-compatibility.md`。
 
 ## 发布版本
 
